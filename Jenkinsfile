@@ -1,6 +1,15 @@
+#!/usr/bin/env groovy
+
 pipeline {
+    agent any
   stages {
     stage('Build') {
+     when {
+        not {
+            branch '*WIP*'
+        }
+        beforeAgent true
+      }
       parallel {
         stage("Build 1") {
           steps {
@@ -45,10 +54,21 @@ pipeline {
       }
     }
     stage('Test') {
+     when {
+        not {
+            branch '*WIP*'
+        }
+        beforeAgent true
+      }
       parallel {
         stage("Test 1") {
           steps {
-            echo 'Test 1'
+            echo '1'
+            sh 'echo ${BRANCH_NAME}'
+            echo '2'
+            sh 'echo ${BRANCH}'
+            echo '3'
+            sh 'echo ${GIT_BRANCH}'
           }
           post {
             success {
@@ -114,6 +134,12 @@ pipeline {
       }
     }
     stage('Web 1') {
+     when {
+        not {
+            branch '*WIP*'
+        }
+        beforeAgent true
+      }
       steps {
         echo 'Web 1'
       }
